@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
+    @IBOutlet var operatorButtons: [UIButton]!
     
     var elements: [String] {
         return textView.text.split(separator: " ").map { "\($0)" }
