@@ -109,46 +109,45 @@ class ViewController: UIViewController {
         // Erwan : calcul only X and / operation and build a new operationsToReduce Array
         var m = 0
         while m < operationsToReduce.count {
-//            print("En cours de traitement de : \(operationsToReduce[m])")
+            print("En cours de traitement de : \(operationsToReduce[m])")
             if operationsToReduce[m] == "x" || operationsToReduce[m] == "÷"  {
-                let left = Int(operationsToReduce[m-1])!
+                let left = Double(operationsToReduce[m-1])!
                 let operand = operationsToReduce[m]
-                let right = Int(operationsToReduce[m+1])!
-                let result: Int
+                let right = Double(operationsToReduce[m+1])!
+                let result: Double
                 switch operand {
                 case "x": result = left * right
                 case "÷": result = left / right
                 default: fatalError("Unknown operator !")
                 }
-//                print(operationsToReduce)
+                print(operationsToReduce)
                 operationsToReduce.remove(at: m-1)
                 operationsToReduce.remove(at: m-1)
                 operationsToReduce.remove(at: m-1)
                 operationsToReduce.insert("\(result)", at: m-1)
                 m = m - 1
-//                print(operationsToReduce)
+                print(operationsToReduce)
             }
             m += 1
         }
         
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
+            let left = Double(operationsToReduce[0])!
             let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
+            let right = Double(operationsToReduce[2])!
             
-            let result: Int
+            let result: Double
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
             default: fatalError("Unknown operator !")
             }
-//            print(operationsToReduce)
+            print(operationsToReduce)
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
             operationsToReduce.insert("\(result)", at: 0)
-//            print(operationsToReduce)
+            print(operationsToReduce)
         }
-        
         textView.text.append(" = \(operationsToReduce.first!)")
     }
 
