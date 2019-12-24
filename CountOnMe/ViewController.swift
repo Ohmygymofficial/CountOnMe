@@ -13,18 +13,26 @@ class ViewController: UIViewController {
     @IBOutlet var numberButtons: [UIButton]!
     @IBOutlet var operatorButtons: [UIButton]!
     @IBOutlet weak var ACbutton: UIButton!
+    var checking = Checking()
     
-    var model = Model()
     
+    //MARK : - Test Button à enlever
+    @IBOutlet weak var testButton: UIButton!
+    
+    @IBAction func testButtonAction(_ sender: UIButton) {
+  
+    }
+    
+
     var elements: [String] {
         return textView.text.split(separator: " ").map { "\($0)" }
     }
     
-    // Error check computed variables
-    var expressionIsCorrect: Bool {
-        //ERWAN : a ajouter les autres conditions : signe divisé, signe multiplié
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
-    }
+//    // Error check computed variables
+//    var expressionIsCorrect: Bool {
+//        return checking.expressionIsCorrect(lastCharacter: elements.last)
+//    }
+    
     
     var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
@@ -75,13 +83,11 @@ class ViewController: UIViewController {
         }
     }
     
-
+    
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard expressionIsCorrect else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
+        guard checking.expressionIsCorrect(lastCharacter: elements.last) else {
+            return alertMessage(title: "Erreur", message: "Vous avez cliqué sur égal avec une expression incorrecte", action: "Annuler")
         }
         
         guard expressionHaveEnoughElement else {
@@ -145,6 +151,14 @@ class ViewController: UIViewController {
         }
         textView.text.append(" = \(operationsToReduce.first!)")
     }
-    
 }
 
+
+
+extension ViewController {
+    func alertMessage(title: String, message: String, action: String) {
+    let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    alertVC.addAction(UIAlertAction(title: action, style: .cancel, handler: nil))
+    return self.present(alertVC, animated: true, completion: nil)
+    }
+}
