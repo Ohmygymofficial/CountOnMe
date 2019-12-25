@@ -7,11 +7,31 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
-            uuid = "72136FD8-FA56-4F85-AEA4-340887366F79"
-            shouldBeEnabled = "No"
-            ignoreCount = "1"
+            uuid = "3A062538-729B-4FEB-8521-9E2DB3C09C80"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
             continueAfterRunningActions = "No"
-            scope = "0"
+            scope = "1"
+            stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SwiftErrorBreakpoint">
+         <BreakpointContent
+            uuid = "0934D040-A23E-4B88-96E4-973440B15CBA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            uuid = "6A4324CA-21DF-4114-BA33-E94A575F2C67"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            scope = "2"
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>

@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet var numberButtons: [UIButton]!
     @IBOutlet var operatorButtons: [UIButton]!
     @IBOutlet weak var ACbutton: UIButton!
-    var checking = Checking()
+    let checking = Checking()
     
     
     //MARK : - Test Button à enlever
@@ -24,19 +24,15 @@ class ViewController: UIViewController {
     }
     
 
-    var elements: [String] {
-        return textView.text.split(separator: " ").map { "\($0)" }
-    }
-    
 //    // Error check computed variables
 //    var expressionIsCorrect: Bool {
 //        return checking.expressionIsCorrect(lastCharacter: elements.last)
 //    }
     
-    
-    var expressionHaveEnoughElement: Bool {
-        return elements.count >= 3
-    }
+//    
+//    var expressionHaveEnoughElement: Bool {
+//        return elements.count >= 3
+//    }
     
     var canAddOperator: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
@@ -86,15 +82,8 @@ class ViewController: UIViewController {
     
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard checking.expressionIsCorrect(lastCharacter: elements.last) else {
-            return alertMessage(title: "Erreur", message: "Vous avez cliqué sur égal avec une expression incorrecte", action: "Annuler")
-        }
-        
-        guard expressionHaveEnoughElement else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
-        }
+        checking.expressionIsCorrect(lastCharacter: elements.last)
+        checking.expressionHaveEnoughElement(elementsCount: elements.count)
         
         // Create local copy of operations
         var operationsToReduce = elements
@@ -151,14 +140,13 @@ class ViewController: UIViewController {
         }
         textView.text.append(" = \(operationsToReduce.first!)")
     }
-}
-
-
-
-extension ViewController {
+    
     func alertMessage(title: String, message: String, action: String) {
-    let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    alertVC.addAction(UIAlertAction(title: action, style: .cancel, handler: nil))
-    return self.present(alertVC, animated: true, completion: nil)
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: action, style: .cancel, handler: nil))
+        return self.present(alertVC, animated: true, completion: nil)
     }
+
 }
+
+

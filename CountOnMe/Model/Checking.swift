@@ -9,14 +9,27 @@
 import Foundation
 
 class Checking {
-        var number = [String]()
+    let calculator = Calculator()
     
-    // Error check computed variables
-    func expressionIsCorrect(lastCharacter: String?) -> Bool {
-        guard let lastCharacter = lastCharacter else {
-            print("Erreur expressionIsCorrect")
-            return false
-        }
-        return lastCharacter != "+" && lastCharacter != "-" && lastCharacter != "x" && lastCharacter != "÷"
+    enum CheckingSituation {
+      case IsCorrect, haventEnoughElement, haveResult, divisionByZero, operatorIsAlredySet
+    }
+    
+    var elements: [String] {
+        return calculator.elementTextView.split(separator: " ").map { "\($0)" }
+    }
+    
+    // different checking error possible
+    var expressionIsCorrect: Bool {
+      return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "/"
+    }
+    var expressionHaveEnoughElement: Bool {
+      return elements.count >= 3
+    }
+    var canAddOperator: Bool {
+      return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "/"
+    }
+    var expressionHaveResult: Bool {
+      return calculator.elementTextView.firstIndex(of: "=") != nil
     }
 }
