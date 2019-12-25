@@ -11,10 +11,6 @@ import Foundation
 class Checking {
     let calculator = Calculator()
     
-    enum CheckingSituation {
-      case IsCorrect, haventEnoughElement, haveResult, divisionByZero, operatorIsAlredySet
-    }
-    
     var elements: [String] {
         return calculator.elementTextView.split(separator: " ").map { "\($0)" }
     }
@@ -26,10 +22,10 @@ class Checking {
     var expressionHaveEnoughElement: Bool {
       return elements.count >= 3
     }
-    var canAddOperator: Bool {
-      return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "/"
-    }
     var expressionHaveResult: Bool {
       return calculator.elementTextView.firstIndex(of: "=") != nil
+    }
+    var canAddOperator: Bool {
+      return elements.last != "+" && elements.last != "-" && elements.last != "*" && elements.last != "/"
     }
 }
