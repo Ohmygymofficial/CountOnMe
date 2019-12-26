@@ -8,8 +8,8 @@
 
 import Foundation
 extension Notification.Name {
-  static let result = Notification.Name("result")
-  static let error = Notification.Name("error")
+    static let result = Notification.Name("result")
+    static let error = Notification.Name("error")
 }
 
 class Calculator {
@@ -62,61 +62,51 @@ class Calculator {
         guard checking.expressionHaveEnoughElement else {
             return NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.haveNotEnoughElement])
         }
-//                // Create local copy of operations
-//                var operationsToReduce = elements
-//        
-//                // Calcul only X and / operation and build a new operationsToReduce Array
-//                var m = 0
-//                while m < operationsToReduce.count {
-//                    print("En cours de traitement de : \(operationsToReduce[m])")
-//                    if operationsToReduce[m] == "x" || operationsToReduce[m] == "÷"  {
-//                        let left = Double(operationsToReduce[m-1])!
-//                        let operand = operationsToReduce[m]
-//                        let right = Double(operationsToReduce[m+1])!
-//                        let result: Double
-//                        switch operand {
-//                        case "x":
-//                            result = left * right
-//                        case "÷":
-//                            if right == 0 {
-//                                let alertVC = UIAlertController(title: "Division par Zéro", message: "La division par zéro n'existe pas", preferredStyle: .alert)
-//                                alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//                                self.present(alertVC, animated: true, completion: nil)
-//                                textView.text = ""
-//                            }
-//                            result = left / right
-//                        default: fatalError("Unknown operator !")
-//                        }
-//                        print(operationsToReduce)
-//                        operationsToReduce.remove(at: m-1)
-//                        operationsToReduce.remove(at: m-1)
-//                        operationsToReduce.remove(at: m-1)
-//                        operationsToReduce.insert("\(result)", at: m-1)
-//                        m = m - 1
-//                        print(operationsToReduce)
-//                    }
-//                    m += 1
-//                }
-//        
-//                // Iterate over operations while an operand still here
-//                while operationsToReduce.count > 1 {
-//                    let left = Double(operationsToReduce[0])!
-//                    let operand = operationsToReduce[1]
-//                    let right = Double(operationsToReduce[2])!
-//        
-//                    let result: Double
-//                    switch operand {
-//                    case "+": result = left + right
-//                    case "-": result = left - right
-//                    default: fatalError("Unknown operator !")
-//                    }
-//                    print(operationsToReduce)
-//                    operationsToReduce = Array(operationsToReduce.dropFirst(3))
-//                    operationsToReduce.insert("\(result)", at: 0)
-//                    print(operationsToReduce)
-//                }
-//                textView.text.append(" = \(operationsToReduce.first!)")
-//            }
-
+        guard checking.expressionHaveResult else {
+            return NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.haveResult])
+        }
+        var operationsToReduce = checking.elements
+        readyForCalculate(operationsToReduce: &operationsToReduce)
+        elementTextView.append(" = \(operationsToReduce.first ?? "Error")")
+    }
+    
+    // using inout to permitt transform operationsToReduce in this function and in his caller
+    func readyForCalculate(operationsToReduce: inout [String]) {
+        //                 Create local copy of operations
+        while operationsToReduce.count > 1 {
+            var place = 0
+            if let index = operationsToReduce.firstIndex(where: { $0 == "*" || $0 == "÷"}) {
+                place = index - 1
+            }
+            let left = Double(operationsToReduce[0])!
+            let operand = operationsToReduce[1]
+            let right = Double(operationsToReduce[2])!
+            var operationResult: Double = 0.00
+            switch operand {
+            case "+":
+                operationResult = left + right
+            case "-":
+                operationResult = left - right
+            case "x":
+                operationResult = left * right
+            case "÷":
+                if right == 0 {
+                    NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.divisionByZero])
+                }
+                operationResult = left / right
+            default:
+                NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.unknowOperator])
+            }
+            print(operationsToReduce)
+            operationsToReduce.remove(at: place)
+            operationsToReduce.remove(at: place)
+            operationsToReduce.remove(at: place)
+            operationsToReduce.insert("\(operationResult)", at: place)
+            print(operationsToReduce)
+        }
+    }
+    
+    func reset() {
+        elementTextView = ""
     }
 }

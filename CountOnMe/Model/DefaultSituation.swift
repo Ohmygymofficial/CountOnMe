@@ -8,5 +8,5 @@
 
 import Foundation
 enum DefaultSituation {
-  case isIncorrect, haveNotEnoughElement, haveResult, divisionByZero, operatorIsAlredySet
+  case isIncorrect, haveNotEnoughElement, haveResult, divisionByZero, operatorIsAlredySet, unknowOperator
 }
