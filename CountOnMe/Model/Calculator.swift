@@ -15,18 +15,18 @@ class Calculator {
     
     weak var delegate: ModelDelegate?
     
-    func sendToController(data: String) {
+    private func sendToController(data: String) {
         delegate?.didReceiveData(data)
     }
     
-    enum OperationSymbol: String {
+    private enum OperationSymbol: String {
         case plusSymbol = " + "
         case lessSymbol = " - "
         case multiplySymbol = " x "
         case divisionSymbol = " ÷ "
     }
     
-    enum ShowSituation: String {
+    private enum ShowSituation: String {
         case isIncorrect = " Expression is incorrect "
         case haveNotEnoughElement = " Missing element to generate calcul "
         case haveResult = " Result is already showed on screen "
@@ -35,7 +35,7 @@ class Calculator {
         case result = "result"
     }
     
-    var elements: [String] {
+    private var elements: [String] {
         return elementTextView.split(separator: " ").map { "\($0)" }
     }
     
@@ -46,16 +46,16 @@ class Calculator {
     }
     
     // different checking error possible
-    var isExpressionCorrect: Bool {
+    private var isExpressionCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
-    var expressionHaveEnoughElement: Bool {
+    private var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
-    func expressionHaveResult(expression: String) -> Bool {
+    private func expressionHaveResult(expression: String) -> Bool {
         return expression.firstIndex(of: "=") != nil
     }
-    var canAddOperator: Bool {
+    private var canAddOperator: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
     
@@ -88,7 +88,7 @@ class Calculator {
         }
     }
     
-    func restoreLastResult(operationSymbol: String) {
+    private func restoreLastResult(operationSymbol: String) {
         if expressionHaveResult(expression: elementTextView) {
             if elementTextView.prefix(7) == "= Error" {
                 delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
@@ -117,7 +117,7 @@ class Calculator {
     }
     
     // using inout to permitt transform operationsToReduce in this function and in his caller
-    func calculate(operationsToReduce: inout [String]) {
+    private func calculate(operationsToReduce: inout [String]) {
         //                 Create local copy of operations
         while operationsToReduce.count > 1 {
             var place = 0
@@ -148,7 +148,7 @@ class Calculator {
         }
     }
     
-    func checkAfterCalculate(operationsToReduce: [String]) {
+    private func checkAfterCalculate(operationsToReduce: [String]) {
         if operationsToReduce.first == "inf" || operationsToReduce.first == "-inf" || operationsToReduce.first == "-nan" {
             sendToController(data: ShowSituation.divisionByZero.rawValue)
             elementTextView = "= Error"

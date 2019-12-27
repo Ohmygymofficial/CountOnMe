@@ -16,13 +16,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var ACbutton: UIButton!
     private let calculator = Calculator()
     
-        
-    //MARK : - Test Button à enlever
-    @IBOutlet weak var testButton: UIButton!
-    @IBAction func testButtonAction(_ sender: UIButton) {
-        
-    }
-    
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,14 +40,8 @@ class ViewController: UIViewController {
         calculator.addOperator(operationSymbol: symbol)
     }
     
-    @IBAction func tappedEqualButton(_ sender: UIButton) {
+    @IBAction func tappedEqualButton() {
         calculator.checkBeforeCalculate()
-    }
-    
-    func showAlert(error: String) {
-        let alertVC = UIAlertController(title: "ERROR", message: error, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        present(alertVC, animated: true, completion: nil)
     }
 }
 
