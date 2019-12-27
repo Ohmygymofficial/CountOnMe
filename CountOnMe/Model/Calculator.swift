@@ -149,7 +149,7 @@ class Calculator {
     }
     
     func checkAfterCalculate(operationsToReduce: [String]) {
-        if operationsToReduce.first == "inf" || operationsToReduce.first == "-inf" {
+        if operationsToReduce.first == "inf" || operationsToReduce.first == "-inf" || operationsToReduce.first == "-nan" {
             sendToController(data: ShowSituation.divisionByZero.rawValue)
             elementTextView = "= Error"
         } else {
