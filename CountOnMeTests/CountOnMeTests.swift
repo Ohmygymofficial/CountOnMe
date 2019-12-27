@@ -12,14 +12,83 @@ import XCTest
 class CountOnMeTests: XCTestCase {
     
     var calculate = Calculator()
-
+    
     override func setUp() {
         super.setUp()
         calculate = Calculator()
     }
-
+    
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+    
+    // Test ONLY public var and func : That is the list
+    //    internal protocol ModelDelegate : AnyObject {
+    //
+    //        func didReceiveData(_ data: String)
+    //    }
+    //
+    //    internal class Calculator {
+    //
+    //        weak internal var delegate: ModelDelegate?
+    //
+    //    internal var elements: [String] { get }
+    //
+    //        internal var elementTextView: String { get set }
+    //
+    //        internal func addNumber(number: String)
+    //
+    //        internal func addOperator(operationSymbol: String)
+    //
+    //        internal func checkBeforeCalculate()
+    //
+    //        internal func reset()
+    
+    func testAddOneNumber() {
+        calculate.addNumber(number: "6")
+        XCTAssertEqual(calculate.elementTextView, "6")
+    }
+    
+    func testAddTwoNumber() {
+        calculate.addNumber(number: "6")
+        calculate.addNumber(number: "9")
+        XCTAssertEqual(calculate.elementTextView, "69")
+    }
+    
+    func testAddTwoNumberAndDotNumber() {
+        calculate.addNumber(number: "6")
+        calculate.addNumber(number: "9")
+        calculate.addNumber(number: ".")
+        calculate.addNumber(number: "9")
+        XCTAssertEqual(calculate.elementTextView, "69.9")
+    }
+    
+    func testAddOneOperator() {
+        calculate.addOperator(operationSymbol: "x")
+        XCTAssertEqual(calculate.elementTextView, "2 x ")
+    }
+    
+    func testAddTwoOperator() {
+        calculate.addOperator(operationSymbol: "x")
+        calculate.addOperator(operationSymbol: "+")
+        XCTAssertEqual(calculate.elementTextView, "2 + ")
+    }
+    
+    func testReset() {
+        calculate.reset()
+        XCTAssertEqual(calculate.elementTextView, "")
+    }
+    
+    func testAddNumberAfterReset() {
+        calculate.reset()
+        calculate.addNumber(number: "6")
+        XCTAssertEqual(calculate.elementTextView, "6")
+    }
+    
+    func testAddOperatorAfterReset() {
+        calculate.reset()
+        calculate.addOperator(operationSymbol: "x")
+        XCTAssertEqual(calculate.elementTextView.prefix(7), "= Error")
     }
     
     func testSimpleAddition() {
@@ -57,17 +126,17 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculate.elementTextView, "10 ÷ 2 = 5.0")
         XCTAssertEqual(calculate.elements.last, "5.0")
     }
-
+    
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
-
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         measure {
             // Put the code you want to measure the time of here.
         }
     }
-
+    
 }

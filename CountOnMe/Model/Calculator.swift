@@ -28,7 +28,7 @@ class Calculator {
         case result = "result"
     }
     
-    private var elements: [String] {
+    var elements: [String] {
         return elementTextView.split(separator: " ").map { "\($0)" }
     }
     
@@ -82,9 +82,10 @@ class Calculator {
     }
     
     private func restoreLastResult(operationSymbol: String) {
-        if expressionHaveResult(expression: elementTextView) {
-            if elementTextView.prefix(7) == "= Error" {
+        if expressionHaveResult(expression: elementTextView) || elementTextView == "" {
+            if elementTextView.prefix(7) == "= Error" || elementTextView == "" {
                 delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
+                elementTextView = "= Error"
             } else {
                 guard let lastElement = elements.last else {
                     return elementTextView = ""

@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         calculator.addOperator(operationSymbol: symbol)
     }
     
-    @IBAction func tappedEqualButton() {
+    @IBAction func tappedEqualButton(_ sender: UIButton) {
         calculator.checkBeforeCalculate()
     }
 }
