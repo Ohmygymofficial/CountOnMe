@@ -7,8 +7,17 @@
 //
 
 import Foundation
+protocol ModelDelegate: class {
+    func didReceiveData(_ data: String)
+}
 
 class Calculator {
+    
+    weak var delegate: ModelDelegate?
+    
+    func sendToController(data: String) {
+        delegate?.didReceiveData(data)
+    }
     
     enum OperationSymbol: String {
         case plusSymbol = " + "
@@ -17,16 +26,23 @@ class Calculator {
         case divisionSymbol = " ÷ "
     }
     
-    enum DefaultSituation: String {
+    enum ShowSituation: String {
         case isIncorrect = " Expression is incorrect "
         case haveNotEnoughElement = " Missing element to generate calcul "
         case haveResult = " Result is already showed on screen "
         case divisionByZero = " Sorry, you can't make a division by 0 "
         case unknowOperator = " Sorry, this symbol do not exist "
+        case result = "result"
     }
     
     var elements: [String] {
         return elementTextView.split(separator: " ").map { "\($0)" }
+    }
+    
+    var elementTextView: String = "1 + 1 = 2" {
+        didSet {
+            sendToController(data: ShowSituation.result.rawValue)
+        }
     }
     
     // different checking error possible
@@ -43,27 +59,15 @@ class Calculator {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
     
-    var elementTextView: String = "1 + 1 = 2" {
-        didSet {
-            NotificationCenter.default.post(name: .result, object: nil)
-        }
-    }
-    
     func addNumber(number: String) {
         if expressionHaveResult(expression: elementTextView) {
             elementTextView = ""
         }
-        elementTextView.append(number)
+            elementTextView += number
     }
     
     func addOperator(operationSymbol: String) {
-        // if is already a result, we can add Operator, but restore the last result
-        if expressionHaveResult(expression: elementTextView) {
-            guard let lastElement = elements.last else {
-                return elementTextView = ""
-            }
-            elementTextView = lastElement
-        }
+        restoreLastResult(operationSymbol: operationSymbol)
         if canAddOperator {
             switch operationSymbol {
             case "+":
@@ -75,7 +79,7 @@ class Calculator {
             case "÷":
                 elementTextView += OperationSymbol.divisionSymbol.rawValue
             default:
-                NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.isIncorrect])
+                delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
             }
         } else {
             // Change the operator Symbol
@@ -84,31 +88,36 @@ class Calculator {
         }
     }
     
-    func isExpressionIncorrect() -> String? {
+    func restoreLastResult(operationSymbol: String) {
+        if expressionHaveResult(expression: elementTextView) {
+            if elementTextView.prefix(7) == "= Error" {
+                delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
+            } else {
+                guard let lastElement = elements.last else {
+                    return elementTextView = ""
+                }
+                elementTextView = lastElement
+            }
+        }
+    }
+    
+    func checkBeforeCalculate() {
         guard isExpressionCorrect else {
-            return DefaultSituation.isIncorrect.rawValue
+            return sendToController(data: ShowSituation.isIncorrect.rawValue)
         }
         guard expressionHaveEnoughElement else {
-            return DefaultSituation.haveNotEnoughElement.rawValue
+            return sendToController(data: ShowSituation.haveNotEnoughElement.rawValue)
         }
         if expressionHaveResult(expression: elementTextView) {
-            return DefaultSituation.haveResult.rawValue
+            return sendToController(data: ShowSituation.haveResult.rawValue)
         }
-        return nil
-    }
-    
-    func defaultSituation(defaultCase: DefaultSituation.RawValue) -> String {
-        return defaultCase
-    }
-    
-    func calculate() {
+        // create a local copy of elements
         var operationsToReduce = elements
-        readyForCalculate(operationsToReduce: &operationsToReduce)
-        elementTextView.append(" = \(operationsToReduce.first ?? "Error")")
+        calculate(operationsToReduce: &operationsToReduce)
     }
     
     // using inout to permitt transform operationsToReduce in this function and in his caller
-    func readyForCalculate(operationsToReduce: inout [String]) {
+    func calculate(operationsToReduce: inout [String]) {
         //                 Create local copy of operations
         while operationsToReduce.count > 1 {
             var place = 0
@@ -116,10 +125,10 @@ class Calculator {
                 place = index - 1
             }
             let left = Double(operationsToReduce[place])!
-            let operand = operationsToReduce[place + 1]
+            let operatorSymbol = operationsToReduce[place + 1]
             let right = Double(operationsToReduce[place + 2])!
             var operationResult: Double = 0.00
-            switch operand {
+            switch operatorSymbol {
             case "+":
                 operationResult = left + right
             case "-":
@@ -127,28 +136,28 @@ class Calculator {
             case "x":
                 operationResult = left * right
             case "÷":
-                if right == 0 {
-                    NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.divisionByZero])
-                }
                 operationResult = left / right
             default:
-                NotificationCenter.default.post(name: .error, object: nil, userInfo: ["Error": DefaultSituation.unknowOperator])
+                sendToController(data: ShowSituation.unknowOperator.rawValue)
             }
-            print(operationsToReduce)
             operationsToReduce.remove(at: place)
             operationsToReduce.remove(at: place)
             operationsToReduce.remove(at: place)
             operationsToReduce.insert("\(operationResult)", at: place)
-            print(operationsToReduce)
+            checkAfterCalculate(operationsToReduce: operationsToReduce)
+        }
+    }
+    
+    func checkAfterCalculate(operationsToReduce: [String]) {
+        if operationsToReduce.first == "inf" || operationsToReduce.first == "-inf" {
+            sendToController(data: ShowSituation.divisionByZero.rawValue)
+            elementTextView = "= Error"
+        } else {
+            elementTextView += " = \(operationsToReduce.first ?? "= Error")"
         }
     }
     
     func reset() {
-        elementTextView = "Mise a zero"
+        elementTextView = ""
     }
-}
-
-extension Notification.Name {
-    static let result = Notification.Name("result")
-    static let error = Notification.Name("error")
 }

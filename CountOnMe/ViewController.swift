@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
@@ -15,17 +16,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var ACbutton: UIButton!
     private let calculator = Calculator()
     
+        
     //MARK : - Test Button à enlever
     @IBOutlet weak var testButton: UIButton!
     @IBAction func testButtonAction(_ sender: UIButton) {
         
     }
     
-    
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTextView), name: .result, object: nil)
+        calculator.delegate = self
     }
     
     // View actions
@@ -47,20 +48,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        if let error = calculator.isExpressionIncorrect() {
-            showAlert(error: error)
-        } else {
-            calculator.calculate()
-        }
-    }
-    
-    // updating the text view
-     @objc func updateTextView() {
-       if calculator.elementTextView.isEmpty {
-          textView.text = ""
-       } else {
-          textView.text = calculator.elementTextView
-       }
+        calculator.checkBeforeCalculate()
     }
     
     func showAlert(error: String) {
@@ -70,4 +58,15 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: ModelDelegate {
+    func didReceiveData(_ data: String) {
+        if data == "result" {
+            textView.text = calculator.elementTextView
+        } else {
+            let alertVC = UIAlertController(title: "ERROR", message: data, preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alertVC, animated: true, completion: nil)
+        }
+    }
+}
 
