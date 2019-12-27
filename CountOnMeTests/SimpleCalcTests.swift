@@ -1,34 +1,44 @@
+////
+////  SimpleCalcTests.swift
+////  SimpleCalcTests
+////
+////  Created by Vincent Saluzzo on 29/03/2019.
+////  Copyright © 2019 Vincent Saluzzo. All rights reserved.
+////
 //
-//  SimpleCalcTests.swift
-//  SimpleCalcTests
+//import XCTest
+//@testable import CountOnMe
 //
-//  Created by Vincent Saluzzo on 29/03/2019.
-//  Copyright © 2019 Vincent Saluzzo. All rights reserved.
+//class SimpleCalcTests: XCTestCase {
 //
-
-import XCTest
-@testable import SimpleCalc
-
-class SimpleCalcTests: XCTestCase {
-
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
-}
+//   var calculator: Calculator!
+//
+//       override func setUp() {
+//           super.setUp()
+//           calculator = Calculator()
+//       }
+//
+//       override func tearDown() {
+//           calculator = nil
+//           super.tearDown()
+//       }
+//
+//       func testIsExpressionIsCorrect() {
+//           // Given
+//           let number = "1"
+//           let `operator` = "+"
+//           // When
+//           calculator.addNumber(number: number)
+//           calculator.addOperator(operationSymbol: `operator`)
+//           // Then
+//           XCTAssertTrue(calculator.isExpressionCorrect)
+//       }
+//
+//       func testPerformanceExample() {
+//           // This is an example of a performance test case.
+//           self.measure {
+//               // Put the code you want to measure the time of here.
+//           }
+//       }
+//
+//}

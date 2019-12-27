@@ -13,8 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet var numberButtons: [UIButton]!
     @IBOutlet var operatorButtons: [UIButton]!
     @IBOutlet weak var ACbutton: UIButton!
-    let checking = Checking()
-    let calculator = Calculator()
+    private let calculator = Calculator()
     
     //MARK : - Test Button à enlever
     @IBOutlet weak var testButton: UIButton!
@@ -27,7 +26,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(updateTextView), name: .result, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: .error, object: nil)
     }
     
     // View actions
@@ -49,40 +47,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        calculator.calculate()
+        if let error = calculator.isExpressionIncorrect() {
+            showAlert(error: error)
+        } else {
+            calculator.calculate()
+        }
     }
     
     // updating the text view
      @objc func updateTextView() {
        if calculator.elementTextView.isEmpty {
-          textView.text = "0"
+          textView.text = ""
        } else {
           textView.text = calculator.elementTextView
        }
     }
-     @objc func errorAlert(_ notification: Notification) {
-       var alertMessage = ""
-         if let error = notification.userInfo?["Error"] as? DefaultSituation {
-           switch error {
-           case .isIncorrect:
-             alertMessage = " Expression is incorrect "
-           case .haveNotEnoughElement:
-             alertMessage = " Missing element to generate calcul "
-           case .haveResult:
-             alertMessage = " Result is already showed on screen "
-           case .divisionByZero:
-             alertMessage = " Sorry, you can't make a division by 0 "
-           case .operatorIsAlredySet:
-             alertMessage = " Sorry, you've already made your choice "
-            case .unknowOperator:
-            alertMessage = " Sorry, this symbol do not exist "
-           }
-         }
-        //Showing message to the user with UIAlertController
-         let alertVC = UIAlertController(title: "ERROR", message: alertMessage, preferredStyle: .alert)
-         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-         self.present(alertVC, animated: true, completion: nil)
-     }
+    
+    func showAlert(error: String) {
+        let alertVC = UIAlertController(title: "ERROR", message: error, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertVC, animated: true, completion: nil)
+    }
 }
 
 
