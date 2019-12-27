@@ -19,13 +19,6 @@ class Calculator {
         delegate?.didReceiveData(data)
     }
     
-    private enum OperationSymbol: String {
-        case plusSymbol = " + "
-        case lessSymbol = " - "
-        case multiplySymbol = " x "
-        case divisionSymbol = " ÷ "
-    }
-    
     private enum ShowSituation: String {
         case isIncorrect = " Expression is incorrect "
         case haveNotEnoughElement = " Missing element to generate calcul "
@@ -71,13 +64,13 @@ class Calculator {
         if canAddOperator {
             switch operationSymbol {
             case "+":
-                elementTextView += OperationSymbol.plusSymbol.rawValue
+                elementTextView += " + "
             case "-":
-                elementTextView += OperationSymbol.lessSymbol.rawValue
+                elementTextView += " - "
             case "x":
-                elementTextView += OperationSymbol.multiplySymbol.rawValue
+                elementTextView += " x "
             case "÷":
-                elementTextView += OperationSymbol.divisionSymbol.rawValue
+                elementTextView += " ÷ "
             default:
                 delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
             }
