@@ -73,6 +73,7 @@ class Calculator {
                 elementTextView += " ÷ "
             default:
                 delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
+                elementTextView = "= Error"
             }
         } else {
             // Change the operator Symbol
@@ -87,10 +88,9 @@ class Calculator {
                 delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
                 elementTextView = "= Error"
             } else {
-                guard let lastElement = elements.last else {
-                    return elementTextView = ""
+                if let lastElement = elements.last {
+                    elementTextView = lastElement
                 }
-                elementTextView = lastElement
             }
         }
     }

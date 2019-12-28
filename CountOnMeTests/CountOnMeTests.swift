@@ -11,9 +11,10 @@ import XCTest
 
 class CountOnMeTests: XCTestCase {
     
-    var calculate = Calculator()
+    var calculate: Calculator!
     
     override func setUp() {
+        // initialize with setUp each test with Instance calculate
         super.setUp()
         calculate = Calculator()
     }
@@ -22,6 +23,9 @@ class CountOnMeTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    //    Given : Etant donné que... [Situation de départ]
+    //    When : Quand... [Action]
+    //    Then : Alors... [Situation d'arrivée]
     // Test ONLY public var and func : That is the list
     //    internal protocol ModelDelegate : AnyObject {
     //
@@ -44,6 +48,8 @@ class CountOnMeTests: XCTestCase {
     //
     //        internal func reset()
     
+    
+    // MARK: - Number TEST
     func testAddOneNumber() {
         calculate.addNumber(number: "6")
         XCTAssertEqual(calculate.elementTextView, "6")
@@ -63,6 +69,15 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculate.elementTextView, "69.9")
     }
     
+    func testAddNumberAfterReset() {
+        calculate.reset()
+        calculate.addNumber(number: "6")
+        XCTAssertEqual(calculate.elementTextView, "6")
+    }
+    
+    
+    
+    // MARK: - Operator TEST
     func testAddOneOperator() {
         calculate.addOperator(operationSymbol: "x")
         XCTAssertEqual(calculate.elementTextView, "2 x ")
@@ -74,23 +89,42 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculate.elementTextView, "2 + ")
     }
     
+    func testAddBadOperator() {
+        calculate.addOperator(operationSymbol: "/")
+        XCTAssertEqual(calculate.elementTextView, "= Error")
+    }
+    
+
+    
+    
+    // MARK: - Reset TEST
     func testReset() {
         calculate.reset()
         XCTAssertEqual(calculate.elementTextView, "")
     }
     
-    func testAddNumberAfterReset() {
-        calculate.reset()
-        calculate.addNumber(number: "6")
-        XCTAssertEqual(calculate.elementTextView, "6")
+    
+    // MARK: - CheckBefore Calcul TEST
+    func testIsExpressionIncorrect() {
+        calculate.addNumber(number: "1")
+        calculate.addOperator(operationSymbol: "+")
+        calculate.checkBeforeCalculate()
+        XCTAssertEqual(calculate.elementTextView, "1 + ")
     }
     
-    func testAddOperatorAfterReset() {
-        calculate.reset()
-        calculate.addOperator(operationSymbol: "x")
-        XCTAssertEqual(calculate.elementTextView.prefix(7), "= Error")
+    func testIsExpressionEnough() {
+        calculate.addNumber(number: "1")
+        calculate.checkBeforeCalculate()
+        XCTAssertEqual(calculate.elementTextView, "1")
     }
     
+    func testIsExpressionHaveResult() {
+         testSimpleAddition()
+        calculate.checkBeforeCalculate()
+        XCTAssertEqual(calculate.elementTextView, "1 + 4 = 5.0")
+     }
+    
+    // MARK: - Calcul TEST
     func testSimpleAddition() {
         calculate.addNumber(number: "1")
         calculate.addOperator(operationSymbol: "+")
@@ -125,6 +159,33 @@ class CountOnMeTests: XCTestCase {
         calculate.checkBeforeCalculate()
         XCTAssertEqual(calculate.elementTextView, "10 ÷ 2 = 5.0")
         XCTAssertEqual(calculate.elements.last, "5.0")
+    }
+    
+    func testDivisionByZero() {
+        calculate.addNumber(number: "10")
+        calculate.addOperator(operationSymbol: "÷")
+        calculate.addNumber(number: "0")
+        calculate.checkBeforeCalculate()
+        XCTAssertEqual(calculate.elementTextView, "= Error")
+        XCTAssertEqual(calculate.elements.last, "Error")
+    }
+    
+    func testRestoreLastResult() {
+        testSimpleDivision()
+        calculate.addOperator(operationSymbol: "+")
+        XCTAssertEqual(calculate.elementTextView, "5.0 + ")
+    }
+    
+    func testTryToRestoreLastResultWithErrorOnScreen() {
+        testDivisionByZero()
+        calculate.addOperator(operationSymbol: "+")
+        XCTAssertEqual(calculate.elementTextView, "= Error + ")
+    }
+    
+    func testTryToRestoreLastResultAfterACTapInside() {
+        testReset()
+        calculate.addOperator(operationSymbol: "+")
+        XCTAssertEqual(calculate.elementTextView, "= Error + ")
     }
     
     func testExample() {
