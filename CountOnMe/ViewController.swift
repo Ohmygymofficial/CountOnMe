@@ -49,7 +49,9 @@ class ViewController: UIViewController {
 extension ViewController: ModelDelegate {
     func didReceiveData(_ data: String) {
         if data == "result" {
-            textView.text = calculator.elementTextView
+            UIView.animate(withDuration: 0.3) {
+                textView.text = calculator.elementTextView
+            }
         } else {
             let alertVC = UIAlertController(title: "ERROR", message: data, preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
