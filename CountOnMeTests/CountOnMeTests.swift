@@ -20,6 +20,7 @@ class CountOnMeTests: XCTestCase {
     }
     
     override func tearDown() {
+        calculate = nil
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
@@ -50,7 +51,7 @@ class CountOnMeTests: XCTestCase {
     
     
     // MARK: - Number TEST
-    func testAddOneNumber() {
+    func testGivenInputIsEmpty_WhenAddingNumber_ThenNumberIsShowed() {
         calculate.addNumber(number: "6")
         XCTAssertEqual(calculate.elementTextView, "6")
     }

@@ -17,21 +17,43 @@ class CountOnMeUiTests: XCTestCase {
         app = XCUIApplication()
         app.launch()
     }
-
+    
     override func tearDown() {
         app = nil
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func testCalcul() {
+     func testACButton() {
+         app.buttons["1"].tap()
+         app.buttons["AC"].tap()
+         let TextView = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .textView).element
+         XCTAssertEqual(TextView.value as? String, "")
+     }
+    
+    func testNumberButtons() {
+        app.buttons["3"].tap()
         app.buttons["4"].tap()
-        app.buttons["2"].tap()
-        app.buttons["1"].tap()
+        app.buttons["5"].tap()
+        app.buttons["6"].tap()
+        app.buttons["7"].tap()
+        app.buttons["8"].tap()
+        app.buttons["9"].tap()
+        app.buttons["."].tap()
+        app.buttons["0"].tap()
         let TextView = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .textView).element
-        
-        XCTAssertEqual(TextView.value as? String, "421")
+        XCTAssertEqual(TextView.value as? String, "3456789.0")
     }
-
+    
+    func testOperatorButton() {
+        app.buttons["2"].tap()
+        app.buttons["+"].tap()
+        app.buttons["-"].tap()
+        app.buttons["x"].tap()
+        app.buttons["÷"].tap()
+        let TextView = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .textView).element
+        XCTAssertEqual(TextView.value as? String, "2 ÷ ")
+    }
+    
     func testTime() {
         measure {
             app.buttons["4"].tap()
