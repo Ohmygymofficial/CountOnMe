@@ -4,15 +4,15 @@
 //
 //  Created by E&M Life Project on 25/12/2019.
 //  Copyright © 2019 Vincent Saluzzo. All rights reserved.
-//
+
 
 import Foundation
-protocol ModelDelegate: class {
+/// Using protocol ModelDelegate to sending information to the controller
+protocol ModelDelegate: AnyObject {
     func didReceiveData(_ data: String)
 }
 
 class Calculator {
-    
     weak var delegate: ModelDelegate?
     
     private func sendToController(data: String) {
@@ -28,17 +28,19 @@ class Calculator {
         case result = "result"
     }
     
+    /// create elements var as Array that contains only the user input, and index them
     var elements: [String] {
         return elementTextView.split(separator: " ").map { "\($0)" }
     }
     
+    /// this var is used to modify the value during the operation and send to the controller for display or display an Error
     var elementTextView: String = "1 + 1 = 2" {
         didSet {
             sendToController(data: ShowSituation.result.rawValue)
         }
     }
     
-    // different checking error possible
+    /// different checking error possible
     private var isExpressionCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
@@ -52,11 +54,11 @@ class Calculator {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
     
-    func addNumber(number: String) {
+    func addStringNumber(stringNumber: String) {
         if expressionHaveResult(expression: elementTextView) {
             elementTextView = ""
         }
-            elementTextView += number
+            elementTextView += stringNumber
     }
     
     func addOperator(operationSymbol: String) {
@@ -76,21 +78,20 @@ class Calculator {
                 elementTextView = "= Error"
             }
         } else {
-            // Change the operator Symbol
+            /// permission to Change the operator Symbol, have to remove last entry
             elementTextView.removeLast(3)
             elementTextView += (" \(operationSymbol) ")
         }
     }
     
+    /// restore last result if user want to use  it for a new calcul
     private func restoreLastResult(operationSymbol: String) {
         if expressionHaveResult(expression: elementTextView) || elementTextView == "" {
             if elementTextView.prefix(7) == "= Error" || elementTextView == "" {
                 delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
                 elementTextView = "= Error"
-            } else {
-                if let lastElement = elements.last {
-                    elementTextView = lastElement
-                }
+            } else if let lastElement = elements.last {
+                elementTextView = lastElement
             }
         }
     }
@@ -105,14 +106,13 @@ class Calculator {
         if expressionHaveResult(expression: elementTextView) {
             return sendToController(data: ShowSituation.haveResult.rawValue)
         }
-        // create a local copy of elements
+        /// create a local copy of elements
         var operationsToReduce = elements
         calculate(operationsToReduce: &operationsToReduce)
     }
     
-    // using inout to permitt transform operationsToReduce in this function and in his caller
+    /// using inout to permitt transform operationsToReduce in this function and in his caller
     private func calculate(operationsToReduce: inout [String]) {
-        //                 Create local copy of operations
         while operationsToReduce.count > 1 {
             var place = 0
             if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "÷"}) {
@@ -138,10 +138,11 @@ class Calculator {
             operationsToReduce.remove(at: place)
             operationsToReduce.remove(at: place)
             operationsToReduce.insert("\(operationResult)", at: place)
-            checkAfterCalculate(operationsToReduce: operationsToReduce)
         }
+        checkAfterCalculate(operationsToReduce: operationsToReduce)
     }
     
+    /// last checking before sending information to the controller
     private func checkAfterCalculate(operationsToReduce: [String]) {
         if operationsToReduce.first == "inf" || operationsToReduce.first == "-inf" || operationsToReduce.first == "-nan" {
             sendToController(data: ShowSituation.divisionByZero.rawValue)

@@ -30,7 +30,7 @@ class CountOnMeUiTests: XCTestCase {
          XCTAssertEqual(TextView.value as? String, "")
      }
     
-    func testNumberButtons() {
+    func testStringNumberButtons() {
         app.buttons["3"].tap()
         app.buttons["4"].tap()
         app.buttons["5"].tap()
@@ -52,6 +52,15 @@ class CountOnMeUiTests: XCTestCase {
         app.buttons["÷"].tap()
         let TextView = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .textView).element
         XCTAssertEqual(TextView.value as? String, "2 ÷ ")
+    }
+    
+    func testEgalButton() {
+        app.buttons["2"].tap()
+        app.buttons["+"].tap()
+        app.buttons["2"].tap()
+        app.buttons["="].tap()
+        let TextView = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .textView).element
+        XCTAssertEqual(TextView.value as? String, "2 + 2 = 4.0")
     }
     
     func testTime() {

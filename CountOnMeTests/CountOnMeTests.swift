@@ -24,28 +24,29 @@ class CountOnMeTests: XCTestCase {
     }
     
     // MARK: - NUMBER TEST
-    func testGivenInputIsEmpty_WhenAddingOneNumber_ThenNumberIsShowed() {
-        calculator.addNumber(number: "4")
+    func testGivenStringNumber4_WhenAddingOneNumber_ThenNumberIsShowed() {
+        let stringNumber = "4"
+        calculator.addStringNumber(stringNumber: stringNumber)
         XCTAssertEqual(calculator.elementTextView, "4")
     }
     
     func testGivenInputIsEmpty_WhenAddingTwoNumbers_ThenNumberIsShowed() {
-        calculator.addNumber(number: "4")
-        calculator.addNumber(number: "2")
+        calculator.addStringNumber(stringNumber: "4")
+        calculator.addStringNumber(stringNumber: "2")
         XCTAssertEqual(calculator.elementTextView, "42")
     }
     
     func testGivenInputIsEmpty_WhenAddingNumberWithDot_ThenNumberIsShowed() {
-        calculator.addNumber(number: "4")
-        calculator.addNumber(number: "2")
-        calculator.addNumber(number: ".")
-        calculator.addNumber(number: "1")
+        calculator.addStringNumber(stringNumber: "4")
+        calculator.addStringNumber(stringNumber: "2")
+        calculator.addStringNumber(stringNumber: ".")
+        calculator.addStringNumber(stringNumber: "1")
         XCTAssertEqual(calculator.elementTextView, "42.1")
     }
     
     func testGivenInputAfterReset_WhenAddingOneNumber_ThenNumberIsShowed() {
         calculator.reset()
-        calculator.addNumber(number: "3")
+        calculator.addStringNumber(stringNumber: "3")
         XCTAssertEqual(calculator.elementTextView, "3")
     }
     
@@ -76,14 +77,14 @@ class CountOnMeTests: XCTestCase {
     
     // MARK: - CHECK BEFORE CALCUL TEST
     func testGivenInputIsEmpty_WhenIncorrectExpressionIsWritten_ThenScreenResultEraseEgal() {
-        calculator.addNumber(number: "1")
+        calculator.addStringNumber(stringNumber: "1")
         calculator.addOperator(operationSymbol: "+")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "1 + ")
     }
     
     func testGivenInputIsEmpty_WhenExpressionIsEnough_ThenScreenResultEraseEgal() {
-        calculator.addNumber(number: "1")
+        calculator.addStringNumber(stringNumber: "1")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "1")
     }
@@ -96,45 +97,45 @@ class CountOnMeTests: XCTestCase {
     
     // MARK: - CALCUL TEST
     func testGivenInputIsEmpty_WhenAdditionIsAsked_ThenScreenGiveTheResult() {
-        calculator.addNumber(number: "1")
+        calculator.addStringNumber(stringNumber: "1")
         calculator.addOperator(operationSymbol: "+")
-        calculator.addNumber(number: "4")
+        calculator.addStringNumber(stringNumber: "4")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "1 + 4 = 5.0")
         XCTAssertEqual(calculator.elements.last, "5.0")
     }
     
     func testGivenInputIsEmpty_WhenSoustractionIsAsked_ThenScreenGiveTheResult() {
-        calculator.addNumber(number: "5")
+        calculator.addStringNumber(stringNumber: "5")
         calculator.addOperator(operationSymbol: "-")
-        calculator.addNumber(number: "1")
+        calculator.addStringNumber(stringNumber: "1")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "5 - 1 = 4.0")
         XCTAssertEqual(calculator.elements.last, "4.0")
     }
     
     func testGivenInputIsEmpty_WhenMultiplicationIsAsked_ThenScreenGiveTheResult() {
-        calculator.addNumber(number: "5")
+        calculator.addStringNumber(stringNumber: "5")
         calculator.addOperator(operationSymbol: "x")
-        calculator.addNumber(number: "2")
+        calculator.addStringNumber(stringNumber: "2")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "5 x 2 = 10.0")
         XCTAssertEqual(calculator.elements.last, "10.0")
     }
     
     func testGivenInputIsEmpty_WhenDivisionIsAsked_ThenScreenGiveTheResult() {
-        calculator.addNumber(number: "10")
+        calculator.addStringNumber(stringNumber: "10")
         calculator.addOperator(operationSymbol: "÷")
-        calculator.addNumber(number: "2")
+        calculator.addStringNumber(stringNumber: "2")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "10 ÷ 2 = 5.0")
         XCTAssertEqual(calculator.elements.last, "5.0")
     }
     
     func testGivenInputIsEmpty_WhenDivisionByZeroIsAsked_ThenScreenReturnError() {
-        calculator.addNumber(number: "10")
+        calculator.addStringNumber(stringNumber: "10")
         calculator.addOperator(operationSymbol: "÷")
-        calculator.addNumber(number: "0")
+        calculator.addStringNumber(stringNumber: "0")
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "= Error")
         XCTAssertEqual(calculator.elements.last, "Error")
