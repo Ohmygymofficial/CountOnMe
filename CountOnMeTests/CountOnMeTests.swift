@@ -24,19 +24,19 @@ class CountOnMeTests: XCTestCase {
     }
     
     // MARK: - NUMBER TEST
-    func testGivenStringNumber4_WhenAddingOneNumber_ThenNumberIsShowed() {
+    func testGivenStringNumber4_WhenAddingNumber_ThenNumberIsShowed() {
         let stringNumber = "4"
         calculator.addStringNumber(stringNumber: stringNumber)
         XCTAssertEqual(calculator.elementTextView, "4")
     }
     
-    func testGivenInputIsEmpty_WhenAddingTwoNumbers_ThenNumberIsShowed() {
+    func testGivenStringNumber4and2_WhenAddingNumbers_ThenNumberIsShowed() {
         calculator.addStringNumber(stringNumber: "4")
         calculator.addStringNumber(stringNumber: "2")
         XCTAssertEqual(calculator.elementTextView, "42")
     }
     
-    func testGivenInputIsEmpty_WhenAddingNumberWithDot_ThenNumberIsShowed() {
+    func testGivenStringNumber4and2Dot1_WhenAddingNumber_ThenNumberIsShowed() {
         calculator.addStringNumber(stringNumber: "4")
         calculator.addStringNumber(stringNumber: "2")
         calculator.addStringNumber(stringNumber: ".")
@@ -44,32 +44,32 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculator.elementTextView, "42.1")
     }
     
-    func testGivenInputAfterReset_WhenAddingOneNumber_ThenNumberIsShowed() {
+    func testGivenStringNumber3AfterReset_WhenAddingNumber_ThenNumberIsShowed() {
         calculator.reset()
         calculator.addStringNumber(stringNumber: "3")
         XCTAssertEqual(calculator.elementTextView, "3")
     }
     
     // MARK: - OPERATOR TEST
-    func testGivenAppIsStarted_WhenAddingOneOperator_ThenTwoAndOperatorIsShowed() {
+    func testGivenOperatorX_WhenAddingOperator_ThenTwoAndOperatorIsShowed() {
         calculator.addOperator(operationSymbol: "x")
         XCTAssertEqual(calculator.elementTextView, "2 x ")
     }
     
-    func testGivenAppIsStarted_WhenAddingTwoOperators_ThenTwoAndLastOperatorIsShowed() {
+    func testGivenOperatorXandLess_WhenAddingOperators_ThenTwoAndLastOperatorIsShowed() {
         calculator.addOperator(operationSymbol: "x")
         calculator.addOperator(operationSymbol: "-")
         XCTAssertEqual(calculator.elementTextView, "2 - ")
     }
     
-    func testGivenAppIsStarted_WhenAddingBadOperator_ThenErrorIsShowed() {
+    func testGivenBadOperator_WhenAddingOperator_ThenErrorIsShowed() {
         calculator.addOperator(operationSymbol: "/")
         XCTAssertEqual(calculator.elementTextView, "= Error")
     }
     
     
     // MARK: - RESET TEST
-    func testGivenWhenever_WhenResetIsAsked_ThenScreenResultBecomeEmpty() {
+    func testGivenAC_WhenResetIsAsked_ThenScreenResultBecomeEmpty() {
         calculator.reset()
         XCTAssertEqual(calculator.elementTextView, "")
     }
@@ -90,13 +90,13 @@ class CountOnMeTests: XCTestCase {
     }
     
     func testGivenHaveAlreadyResult_WhenEgalTapIsAsked_ThenScreenResultIsTheSame() {
-        testGivenInputIsEmpty_WhenAdditionIsAsked_ThenScreenGiveTheResult()
+        testGivenAddition1and4_WhenCalculIsAsked_ThenScreenGiveTheResult()
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "1 + 4 = 5.0")
     }
     
     // MARK: - CALCUL TEST
-    func testGivenInputIsEmpty_WhenAdditionIsAsked_ThenScreenGiveTheResult() {
+    func testGivenAddition1and4_WhenCalculIsAsked_ThenScreenGiveTheResult() {
         calculator.addStringNumber(stringNumber: "1")
         calculator.addOperator(operationSymbol: "+")
         calculator.addStringNumber(stringNumber: "4")
@@ -105,7 +105,7 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculator.elements.last, "5.0")
     }
     
-    func testGivenInputIsEmpty_WhenSoustractionIsAsked_ThenScreenGiveTheResult() {
+    func testGivenSoustraction5and1_WhenCalculIsAsked_ThenScreenGiveTheResult() {
         calculator.addStringNumber(stringNumber: "5")
         calculator.addOperator(operationSymbol: "-")
         calculator.addStringNumber(stringNumber: "1")
@@ -114,7 +114,7 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculator.elements.last, "4.0")
     }
     
-    func testGivenInputIsEmpty_WhenMultiplicationIsAsked_ThenScreenGiveTheResult() {
+    func testGivenMultiplication5and2_WhenCalculIsAsked_ThenScreenGiveTheResult() {
         calculator.addStringNumber(stringNumber: "5")
         calculator.addOperator(operationSymbol: "x")
         calculator.addStringNumber(stringNumber: "2")
@@ -123,7 +123,7 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculator.elements.last, "10.0")
     }
     
-    func testGivenInputIsEmpty_WhenDivisionIsAsked_ThenScreenGiveTheResult() {
+    func testGivenDivision10and2_WhenCalculIsAsked_ThenScreenGiveTheResult() {
         calculator.addStringNumber(stringNumber: "10")
         calculator.addOperator(operationSymbol: "÷")
         calculator.addStringNumber(stringNumber: "2")
@@ -132,7 +132,33 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculator.elements.last, "5.0")
     }
     
-    func testGivenInputIsEmpty_WhenDivisionByZeroIsAsked_ThenScreenReturnError() {
+    // MARK: - OTHERS SITUATION TEST
+    func testGivenAddition_WhenAlreadyHaveAResult_ThenScreenAddOperatorAndLastResult() {
+        testGivenDivision10and2_WhenCalculIsAsked_ThenScreenGiveTheResult()
+        calculator.addOperator(operationSymbol: "+")
+        XCTAssertEqual(calculator.elementTextView, "5.0 + ")
+    }
+    
+    func testGivenSoustraction_WhenAlreadyHaveAResult_ThenScreenAddOperatorAndLastResult() {
+        testGivenDivision10and2_WhenCalculIsAsked_ThenScreenGiveTheResult()
+        calculator.addOperator(operationSymbol: "-")
+        XCTAssertEqual(calculator.elementTextView, "5.0 - ")
+    }
+    
+    func testGivenMultiplication_WhenAlreadyHaveAResult_ThenScreenAddOperatorAndLastResult() {
+        testGivenDivision10and2_WhenCalculIsAsked_ThenScreenGiveTheResult()
+        calculator.addOperator(operationSymbol: "x")
+        XCTAssertEqual(calculator.elementTextView, "5.0 x ")
+    }
+    
+    func testGivenDivision_WhenAlreadyHaveAResult_ThenScreenAddOperatorAndLastResult() {
+        testGivenDivision10and2_WhenCalculIsAsked_ThenScreenGiveTheResult()
+        calculator.addOperator(operationSymbol: "÷")
+        XCTAssertEqual(calculator.elementTextView, "5.0 ÷ ")
+    }
+    
+    // MARK: - ERROR SITUATION TEST
+    func testGivenDivision10By0_WhenCalculIsAsked_ThenScreenReturnError() {
         calculator.addStringNumber(stringNumber: "10")
         calculator.addOperator(operationSymbol: "÷")
         calculator.addStringNumber(stringNumber: "0")
@@ -141,21 +167,60 @@ class CountOnMeTests: XCTestCase {
         XCTAssertEqual(calculator.elements.last, "Error")
     }
     
-    func testGivenHaveAlreadyResult_WhenOperatorIsAdded_ThenScreenAddOperatorAndLastResult() {
-        testGivenInputIsEmpty_WhenDivisionIsAsked_ThenScreenGiveTheResult()
-        calculator.addOperator(operationSymbol: "+")
-        XCTAssertEqual(calculator.elementTextView, "5.0 + ")
+    func testGivenDivision0By0_WhenCalculIsAsked_ThenScreenReturnError() {
+        calculator.addStringNumber(stringNumber: "0")
+        calculator.addOperator(operationSymbol: "÷")
+        calculator.addStringNumber(stringNumber: "0")
+        calculator.checkBeforeCalculate()
+        XCTAssertEqual(calculator.elementTextView, "= Error")
+        XCTAssertEqual(calculator.elements.last, "Error")
     }
     
-    func testGivenScreenHaveError_WhenOperatorIsAdded_ThenScreenReturnError() {
-        testGivenInputIsEmpty_WhenDivisionByZeroIsAsked_ThenScreenReturnError()
+    func testGivenAdditionOperator_WhenScreenDisplayError_ThenScreenDislayError() {
+        testGivenDivision10By0_WhenCalculIsAsked_ThenScreenReturnError()
         calculator.addOperator(operationSymbol: "+")
         XCTAssertEqual(calculator.elementTextView, "= Error + ")
     }
     
-    func testGivenScreenIsEmpty_WhenOperatorIsAdded_ThenScreenReturnError() {
-        testGivenWhenever_WhenResetIsAsked_ThenScreenResultBecomeEmpty()
+    func testGivenSoustractionOperator_WhenScreenDisplayError_ThenScreenDislayError() {
+        testGivenDivision10By0_WhenCalculIsAsked_ThenScreenReturnError()
+        calculator.addOperator(operationSymbol: "-")
+        XCTAssertEqual(calculator.elementTextView, "= Error - ")
+    }
+    
+    func testGivenMultiplicationOperator_WhenScreenDisplayError_ThenScreenDislayError() {
+        testGivenDivision10By0_WhenCalculIsAsked_ThenScreenReturnError()
+        calculator.addOperator(operationSymbol: "x")
+        XCTAssertEqual(calculator.elementTextView, "= Error x ")
+    }
+    
+    func testGivenDivisionOperator_WhenScreenDisplayError_ThenScreenDislayError() {
+        testGivenDivision10By0_WhenCalculIsAsked_ThenScreenReturnError()
+        calculator.addOperator(operationSymbol: "÷")
+        XCTAssertEqual(calculator.elementTextView, "= Error ÷ ")
+    }
+    
+    func testGivenAddition_WhenScreenIsEmpty_ThenScreenDisplayError() {
+        testGivenAC_WhenResetIsAsked_ThenScreenResultBecomeEmpty()
         calculator.addOperator(operationSymbol: "+")
         XCTAssertEqual(calculator.elementTextView, "= Error + ")
+    }
+    
+    func testGivenSoustraction_WhenScreenIsEmpty_ThenScreenDisplayError() {
+        testGivenAC_WhenResetIsAsked_ThenScreenResultBecomeEmpty()
+        calculator.addOperator(operationSymbol: "-")
+        XCTAssertEqual(calculator.elementTextView, "= Error - ")
+    }
+    
+    func testGivenMultiplication_WhenScreenIsEmpty_ThenScreenDisplayError() {
+        testGivenAC_WhenResetIsAsked_ThenScreenResultBecomeEmpty()
+        calculator.addOperator(operationSymbol: "x")
+        XCTAssertEqual(calculator.elementTextView, "= Error x ")
+    }
+    
+    func testGivenDivision_WhenScreenIsEmpty_ThenScreenDisplayError() {
+        testGivenAC_WhenResetIsAsked_ThenScreenResultBecomeEmpty()
+        calculator.addOperator(operationSymbol: "÷")
+        XCTAssertEqual(calculator.elementTextView, "= Error ÷ ")
     }
 }

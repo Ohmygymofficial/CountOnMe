@@ -57,9 +57,9 @@
             filePath = "CountOnMe/Model/Calculator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "checkAfterCalculate(operationsToReduce:)"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "calculate(operationsToReduce:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

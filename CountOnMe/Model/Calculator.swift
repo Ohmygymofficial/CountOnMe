@@ -88,8 +88,8 @@ class Calculator {
     private func restoreLastResult(operationSymbol: String) {
         if expressionHaveResult(expression: elementTextView) || elementTextView == "" {
             if elementTextView.prefix(7) == "= Error" || elementTextView == "" {
-                delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
-                elementTextView = "= Error"
+                    delegate?.didReceiveData(ShowSituation.isIncorrect.rawValue)
+                    elementTextView = "= Error"
             } else if let lastElement = elements.last {
                 elementTextView = lastElement
             }
