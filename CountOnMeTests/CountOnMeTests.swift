@@ -15,14 +15,12 @@ class CountOnMeTests: XCTestCase {
     var calculator: Calculator!
     
     override func setUp() {
-        // initialize with setUp each test with Instance calculate
         super.setUp()
         calculator = Calculator()
     }
     
     override func tearDown() {
         calculator = nil
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
     // MARK: - NUMBER TEST
@@ -91,7 +89,7 @@ class CountOnMeTests: XCTestCase {
     }
     
     func testGivenHaveAlreadyResult_WhenEgalTapIsAsked_ThenScreenResultIsTheSame() {
-        testSimpleAddition()
+        testGivenInputIsEmpty_WhenAdditionIsAsked_ThenScreenGiveTheResult()
         calculator.checkBeforeCalculate()
         XCTAssertEqual(calculator.elementTextView, "1 + 4 = 5.0")
     }
