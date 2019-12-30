@@ -16,7 +16,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var ACbutton: UIButton!
     private let calculator = Calculator()
     
-    
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()

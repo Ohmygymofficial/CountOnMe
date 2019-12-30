@@ -147,7 +147,7 @@ class CountOnMeTests: XCTestCase {
     }
     
     func testGivenScreenHaveError_WhenOperatorIsAdded_ThenScreenReturnError() {
-        testGivenInputIsEmpty_WhenDivisionIsAsked_ThenScreenGiveTheResult()
+        testGivenInputIsEmpty_WhenDivisionByZeroIsAsked_ThenScreenReturnError()
         calculator.addOperator(operationSymbol: "+")
         XCTAssertEqual(calculator.elementTextView, "= Error + ")
     }
