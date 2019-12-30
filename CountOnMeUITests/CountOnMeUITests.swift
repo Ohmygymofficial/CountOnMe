@@ -1,48 +1,43 @@
-//
-//  CountOnMeUITests.swift
-//  CountOnMeUITests
-//
-//  Created by E&M Life Project on 28/12/2019.
-//  Copyright © 2019 Vincent Saluzzo. All rights reserved.
+////
+////  CountOnMeUITests.swift
+////  CountOnMeUITests
+////
+////  Created by E&M Life Project on 28/12/2019.
+////  Copyright © 2019 Vincent Saluzzo. All rights reserved.
+////
 //
 
 import XCTest
-@testable import CountOnMe
 
-class CountOnMeUITests: XCTestCase {
+class CountOnMeUiTests: XCTestCase {
     var app: XCUIApplication!
-
-       override func setUp() {
+    override func setUp() {
         super.setUp()
-        continueAfterFailure = false
-        
+        continueAfterFailure = true
         app = XCUIApplication()
         app.launch()
-       }
+    }
 
-//    func testNumberButtons() {
-//        app.buttons["2"].tap()
-//        app.buttons["4"].tap()
-//        app.buttons["5"].tap()
-//        //essai 1
-////        let result = app.textViews.containing(.staticText, identifier: "45")
-////        XCTAssertTrue(result)
-//        
-//        //essai 2
-////        XCTAssertEqual(app.textViews["Text View"].value as? String, "245")
-//
-//        //essai 3
-////        let button = app.segmentedControls.buttons [ "1" ]
-////        app.buttons["1"].tap()
-////        XCTAssertTrue(button.exists)
-//    }
+    override func tearDown() {
+        app = nil
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+    
+    func testCalcul() {
+        app.buttons["4"].tap()
+        app.buttons["2"].tap()
+        app.buttons["1"].tap()
+        let TextView = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .textView).element
+        
+        XCTAssertEqual(TextView.value as? String, "421")
+    }
 
-    func testLaunchPerformance() {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
-                XCUIApplication().launch()
-            }
+    func testTime() {
+        measure {
+            app.buttons["4"].tap()
+            app.buttons["2"].tap()
+            app.buttons["1"].tap()
+            app.buttons["AC"].tap()
         }
     }
 }
